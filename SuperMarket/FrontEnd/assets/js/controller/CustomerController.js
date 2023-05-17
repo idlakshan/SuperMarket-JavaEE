@@ -1,30 +1,45 @@
-generateId();
+loadAllCustomer();
 //----------------------Save Customer-----------------------
 $("#btnSaveCustomer").click(function (){
-    let customerId=$("#txtCusID").val();
-    let customerName=$("#txtCusName").val();
-    let customerAddress=$("#txtCusAddress").val();
-    let customerSalary=$("#txtCusSalary").val();
-
-    let CustomerObject=new CustomerDTO(customerId,customerName,customerAddress,customerSalary);
-
-    customersDB.push(CustomerObject);
-    loadAllCustomer();
+    saveCustomer();
     clearCustomerTextFields();
-    loadCusIdForCombo();
-    generateId();
+   // loadCusIdForCombo();
+
 
  });
 
+function saveCustomer(){
+    let formData = $("#cusForm").serialize();
+
+    $.ajax({
+        url:"http://localhost:8080/pos/customer",
+        method:"post",
+        data:formData,
+        success:function (res){
+
+        }
+    });
+    loadAllCustomer();
+}
+
  function loadAllCustomer(){
     $("#tblCustomer").empty();
-    for (let customer of customersDB) {
-        let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`;
-        $("#tblCustomer").append(row);
 
-    }
+     $.ajax({
+         url:"http://localhost:8080/pos/customer",
+         method: "get",
+         success:function (resp){
+
+             for (let customer of resp.data) {
+                 let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`;
+                 $("#tblCustomer").append(row);
+             }
+         }
+
+     });
+
     bindRowCustomerClickEvent();
-    loadCusIdForCombo();
+   // loadCusIdForCombo();
 
 
 }
@@ -79,7 +94,6 @@ $("#btnRemoveCustomer").click(function (){
     if(deleteCustomer(deleteId)){
         alert("Customer Successfully Deleted..");
         clearCustomerTextFields();
-        generateId();
     }else {
         alert("No such customer to delete, please check id");
     }
@@ -106,7 +120,6 @@ $("#btnUpdateCustomer").click(function (){
     if (response){
         alert("Customer Updated Successfully..");
         clearCustomerTextFields();
-        generateId();
 
     }else{
         alert("Updated failed");
@@ -134,25 +147,4 @@ function clearCustomerTextFields(){
     $("#txtCusID,#txtCusName,#txtCusAddress,#txtCusSalary").val("");
 }
 
-//-----------Auto generate Id--------------
-function generateId() {
-    let index = customersDB.length - 1;
-    let id;
-    let temp;
-    if (index != -1) {
-        id = customersDB[customersDB.length - 1].id;
-        temp = id.split("-")[1];
-        temp++;
-    }
 
-    if (index == -1) {
-        $("#txtCusID").val("C00-001");
-    } else if (temp <= 9) {
-        $("#txtCusID").val("C00-00" + temp);
-    } else if (temp <= 99) {
-        $("#txtCusID").val("C00-0" + temp);
-    } else {
-        $("#txtCusID").val("C00-" + temp);
-    }
-
-}
