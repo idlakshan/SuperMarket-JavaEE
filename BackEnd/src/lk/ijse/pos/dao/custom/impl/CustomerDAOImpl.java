@@ -33,12 +33,39 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean delete(String s) throws SQLException, ClassNotFoundException {
-        return false;
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
+        Connection connection = CustomerServlet.dataSource.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM customer WHERE cusID=?");
+        statement.setObject(1,id);
+        boolean isDeleted = statement.executeUpdate() > 0;
+        connection.close();
+
+        if (isDeleted){
+            return true;
+        }else {
+            return false;
+
+        }
+
     }
 
     @Override
     public boolean update(Customer customer) throws SQLException, ClassNotFoundException {
+        Connection connection = CustomerServlet.dataSource.getConnection();
+
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Customer SET CusName = ?,CusAddress = ?,cusSalary = ? WHERE CusID = ?");
+        preparedStatement.setObject(1,customer.getCusName());
+        preparedStatement.setObject(2,customer.getCusAddress());
+        preparedStatement.setObject(3,customer.getCusSalary());
+        preparedStatement.setObject(4,customer.getCusID());
+
+        boolean isUpdated = preparedStatement.executeUpdate() > 0;
+
+        if (isUpdated){
+            connection.close();
+            return true;
+        }
         return false;
     }
 

@@ -18,6 +18,8 @@ public class CORSFilter implements Filter {
             filterChain.doFilter(servletRequest,servletResponse);
              HttpServletResponse response = (HttpServletResponse) servletResponse;
              response.addHeader("Access-Control-Allow-Origin","*");
+             response.addHeader("Access-Control-Allow-Methods","DELETE,PUT");
+             response.addHeader("Access-Control-Allow-Headers","Content-Type");
 
     }
 

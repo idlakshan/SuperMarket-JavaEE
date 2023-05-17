@@ -15,11 +15,16 @@ function saveCustomer(){
         url:"http://localhost:8080/pos/customer",
         method:"post",
         data:formData,
-        success:function (res){
-
+        dataType:"json",
+        success:function (resp){
+            alert(resp.message)
+            loadAllCustomer();
+        },
+        error:function (error){
+            alert(JSON.parse(error.responseText).message);
         }
     });
-    loadAllCustomer();
+
 }
 
  function loadAllCustomer(){
@@ -28,17 +33,18 @@ function saveCustomer(){
      $.ajax({
          url:"http://localhost:8080/pos/customer",
          method: "get",
+         dataType:"json",
          success:function (resp){
-
              for (let customer of resp.data) {
-                 let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`;
+                 let row = `<tr><td>${customer.cusId}</td><td>${customer.cusName}</td><td>${customer.cusAddress}</td><td>${customer.cusSalary}</td></tr>`;
                  $("#tblCustomer").append(row);
              }
+             bindRowCustomerClickEvent();
          }
 
      });
 
-    bindRowCustomerClickEvent();
+
    // loadCusIdForCombo();
 
 
@@ -46,8 +52,8 @@ function saveCustomer(){
 
 //-----------------Search Customer----------------
 $("#btnSearchCustomer").click(function (){
-  let TypedId=$("#txtCusSearch").val();
-  let customer=searchCustomer(TypedId);
+  let searchId=$("#txtCusSearch").val();
+  /*let customer=searchCustomer(TypedId);
   if (customer!=null){
       $("#txtCusID").val(customer.id);
       $("#txtCusName").val(customer.name);
@@ -58,7 +64,17 @@ $("#btnSearchCustomer").click(function (){
   }else{
       alert("There is no customer available for this "+TypedId);
   }
+*/
 
+    $.ajax({
+        url:"http://localhost:8080/pos/customer?cusId"+searchId+"",
+        method:"get",
+        dataType:"json",
+        success:function (resp){
+
+          /*  console.log(resp.data.indexOf(searchId))*/
+        }
+    });
 });
 function searchCustomer(cusId){
     for (let customer of customersDB) {
@@ -91,56 +107,55 @@ function bindRowCustomerClickEvent(){
 //--------------------Delete Customer-----------------
 $("#btnRemoveCustomer").click(function (){
     let deleteId=$("#txtCusID").val();
-    if(deleteCustomer(deleteId)){
-        alert("Customer Successfully Deleted..");
-        clearCustomerTextFields();
-    }else {
-        alert("No such customer to delete, please check id");
-    }
+    $.ajax({
+        url:"http://localhost:8080/pos/customer?cusId="+deleteId+"",
+        method:"delete",
+        dataType:"json",
+        success:function (resp){
+            alert(resp.message);
+            loadAllCustomer();
+        },
+        error:function (error){
+            alert(JSON.parse(error.responseText).message);
+        }
+    });
 
 });
 
-
-function deleteCustomer(cusId){
-    let customer=searchCustomer(cusId);
-    if (customer != null){
-        let indexNo= customersDB.indexOf(customer);
-        customersDB.splice(indexNo,1);
-        loadAllCustomer();
-        return true;
-
-    }
-    return false;
-}
 //----------Update Customer-----------------
 
 $("#btnUpdateCustomer").click(function (){
-    let updateId=$("#txtCusID").val();
-    let response=updateCustomer(updateId);
-    if (response){
-        alert("Customer Updated Successfully..");
-        clearCustomerTextFields();
 
-    }else{
-        alert("Updated failed");
+    let id = $("#txtCusID").val();
+    let name = $("#txtCusName").val();
+    let address = $("#txtCusAddress").val();
+    let salary = $("#txtCusSalary").val();
+
+    let customer = {
+        cusId:id,
+        cusName:name,
+        cusAddress:address,
+        cusSalary:salary,
     }
+
+    $.ajax({
+        url:"http://localhost:8080/pos/customer",
+        method:"put",
+        contentType:"application/json",
+        data: JSON.stringify(customer),
+        dataType:"json",
+        success:function (resp){
+            alert(resp.message);
+            loadAllCustomer();
+        },
+        error:function (error){
+            alert(JSON.parse(error.responseText).message);
+        }
+
+    });
+
+
 });
-
-
-function updateCustomer(cusId){
-    let customer=searchCustomer(cusId);
-    if(customer!=null){
-        customer.id=$("#txtCusID").val();
-        customer.name=$("#txtCusName").val();
-        customer.address=$("#txtCusAddress").val();
-        customer.salary=$("#txtCusSalary").val();
-
-        loadAllCustomer();
-        return true;
-
-    }
-    return false;
-}
 
 function clearCustomerTextFields(){
     $("#txtCusID").focus();
