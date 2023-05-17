@@ -79,38 +79,42 @@
     <section id="customerContent">
         <div class=" row mt-5 pt-5 ">
             <h2 class="mb-3">Customer Registration</h2>
-            <div class="ms-2 col-12 col-lg-4">
-                <div class="mb-3 ">
-                    <label class="form-label" for="txtCusId">Customer ID</label>
-                    <input class="form-control" id="txtCusID" placeholder="Your ID" type="text">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="txtCusName">Customer Name</label>
-                    <input class="form-control" id="txtCusName" placeholder="Your Name" type="text">
-                </div>
-                <div class="mb-3 ">
-                    <label class="form-label" for="txtCusAddress">Customer Address</label>
-                    <input class="form-control" id="txtCusAddress" placeholder="Your Address" type="text">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="txtCusSalary">Customer Salary</label>
-                    <input class="form-control" id="txtCusSalary" placeholder="Your Salary" type="text">
+
+                <div class="ms-2 col-12 col-lg-4">
+                    <form action="" id="cusForm">
+                    <div class="mb-3 ">
+                        <label class="form-label" for="txtCusId">Customer ID</label>
+                        <input class="form-control" id="txtCusID" placeholder="Your ID" type="text" name="cusId">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="txtCusName">Customer Name</label>
+                        <input class="form-control" id="txtCusName" placeholder="Your Name" type="text" name="cusName">
+                    </div>
+                    <div class="mb-3 ">
+                        <label class="form-label" for="txtCusAddress">Customer Address</label>
+                        <input class="form-control" id="txtCusAddress" placeholder="Your Address" type="text" name="cusAddress">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="txtCusSalary">Customer Salary</label>
+                        <input class="form-control" id="txtCusSalary" placeholder="Your Salary" type="text" name="cusSalary">
+                    </div>
+
+                    <div aria-label="Basic mixed styles example" class="btn-group mt-2 mb-5 ms-lg-2" role="group">
+                        <button class="btn btn-primary" id="btnSaveCustomer" type="button">Save Customer</button>
+                        <button class="btn btn-danger"  id="btnRemoveCustomer" type="button">Remove</button>
+                        <button class="btn btn-warning" id="btnUpdateCustomer" type="button">Update</button>
+                        <button class="btn btn-secondary"  id="btnClearTextField" type="button">Clear All</button>
+                    </div>
+                    <div class="mb-3 ">
+                        <label class="form-label" for="txtCusSearch">Search Customer</label>
+                        <input aria-describedby="textHelp" class="form-control" id="txtCusSearch" type="text">
+
+                        <button class="btn btn-success mt-2" id="btnSearchCustomer" type="button">Search</button>
+                    </div>
+                    </form>
                 </div>
 
-                <div aria-label="Basic mixed styles example" class="btn-group mt-2 mb-5 ms-lg-2" role="group">
-                    <button class="btn btn-primary" id="btnSaveCustomer" type="button">Save Customer</button>
-                    <button class="btn btn-danger"  id="btnRemoveCustomer" type="button">Remove</button>
-                    <button class="btn btn-warning" id="btnUpdateCustomer" type="button">Update</button>
-                    <button class="btn btn-secondary"  id="btnClearTextField" type="button">Clear All</button>
-                </div>
-                <div class="mb-3 ">
-                    <label class="form-label" for="txtCusSearch">Search Customer</label>
-                    <input aria-describedby="textHelp" class="form-control" id="txtCusSearch" type="text">
 
-                    <button class="btn btn-success mt-2" id="btnSearchCustomer" type="button">Search</button>
-                </div>
-
-            </div>
 
             <div class="ms-lg-5 col-12 col-lg-7">
                 <table class="table">
@@ -136,37 +140,44 @@
     <section id="itemContent">
         <div class=" row mt-5 pt-5 ">
             <h2 class="mb-3">Item Registration</h2>
-            <div class="ms-2 col-12 col-lg-4">
-                <div class="mb-3 ">
-                    <label class="form-label" for="txtItemCode">Item Code</label>
-                    <input class="form-control" id="txtItemCode" placeholder="Code" type="text">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="txtItemName">Item Name</label>
-                    <input class="form-control" id="txtItemName" placeholder="Name" type="text">
-                </div>
-                <div class="mb-3 ">
-                    <label class="form-label" for="txtItemQty">Item Qty</label>
-                    <input class="form-control" id="txtItemQty" placeholder="Qty" type="text">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="txtItemPrice">Unit Price</label>
-                    <input class="form-control" id="txtItemPrice" placeholder="Unit Price" type="text">
+
+                <div class="ms-2 col-12 col-lg-4">
+
+                    <form action="" id="itemForm">
+                    <div class="mb-3 ">
+                        <label class="form-label" for="txtItemCode">Item Code</label>
+                        <input class="form-control" id="txtItemCode" placeholder="Code" type="text" name="itemCode">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="txtItemName">Item Name</label>
+                        <input class="form-control" id="txtItemName" placeholder="Name" type="text" name="itemName">
+                    </div>
+                    <div class="mb-3 ">
+                        <label class="form-label" for="txtItemQty">Item Qty</label>
+                        <input class="form-control" id="txtItemQty" placeholder="Qty" type="text" name="itemQty">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="txtItemPrice">Unit Price</label>
+                        <input class="form-control" id="txtItemPrice" placeholder="Unit Price" type="text" name="itemPrice">
+                    </div>
+
+                    <div aria-label="Basic mixed styles example" class="btn-group mt-2 mb-5 ms-lg-2" role="group">
+                        <button class="btn btn-primary" type="button" id="btnSaveItem">Save Item</button>
+                        <button class="btn btn-danger" type="button" id="btnRemoveItem">Remove</button>
+                        <button class="btn btn-warning" type="button" id="btnUpdateItem">Update</button>
+                        <button class="btn btn-secondary" type="button" id="btnClearItemTextField">Clear All</button>
+                    </div>
+                    <div class="mb-3 ">
+                        <label class="form-label" for="txtItemSearch">Search Item</label>
+                        <input aria-describedby="textHelp" class="form-control" id="txtItemSearch" type="text">
+
+                        <button class="btn btn-success mt-2" id="btnSearchItem" type="button">Search</button>
+                    </div>
+                    </form>
                 </div>
 
-                <div aria-label="Basic mixed styles example" class="btn-group mt-2 mb-5 ms-lg-2" role="group">
-                    <button class="btn btn-primary" type="button" id="btnSaveItem">Save Item</button>
-                    <button class="btn btn-danger" type="button" id="btnRemoveItem">Remove</button>
-                    <button class="btn btn-warning" type="button" id="btnUpdateItem">Update</button>
-                    <button class="btn btn-secondary" type="button" id="btnClearItemTextField">Clear All</button>
-                </div>
-                <div class="mb-3 ">
-                    <label class="form-label" for="txtItemSearch">Search Item</label>
-                    <input aria-describedby="textHelp" class="form-control" id="txtItemSearch" type="text">
 
-                    <button class="btn btn-success mt-2" id="btnSearchItem" type="button">Search</button>
-                </div>
-            </div>
+
 
             <div class="ms-lg-5 col-12 col-lg-7">
                 <table class="table">
