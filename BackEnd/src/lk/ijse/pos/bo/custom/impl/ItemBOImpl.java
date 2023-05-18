@@ -16,7 +16,7 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public JsonArrayBuilder getAllItem() throws SQLException, ClassNotFoundException {
-        return null;
+       return itemDAO.getAll();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public boolean deleteItem(String id) throws SQLException, ClassNotFoundException {
-        return false;
+        return itemDAO.delete(id);
     }
 
     @Override

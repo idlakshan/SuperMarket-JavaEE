@@ -1,14 +1,6 @@
-
+loadAllItems();
 //---------------------Save Item-------------------
 $("#btnSaveItem").click(function () {
-  /*  let itemCode = $("#txtItemCode").val();
-    let itemName = $("#txtItemName").val();
-    let itemQty = $("#txtItemQty").val();
-    let itemPrice = $("#txtItemPrice").val();
-
-    let ItemObject = new ItemDTO(itemCode, itemName, itemQty, itemPrice);
-
-    itemDB.push(ItemObject);*/
     let formData = $("#itemForm").serialize();
 
     $.ajax({
@@ -18,23 +10,33 @@ $("#btnSaveItem").click(function () {
         dataType:"json",
         success:function (resp){
             alert(resp.message);
+            loadAllItems();
 
         }
-
-
     });
-    loadAllItems();
     clearItemTextFields();
 
 });
 
 function loadAllItems() {
     $("#tblItem").empty();
-    for (let item of itemDB) {
-        var row = `<tr><td>${item.code}</td><td>${item.name}</td><td>${item.qty}</td><td>${item.price}</td></tr>`;
-        $("#tblItem").append(row);
-    }
-    bindRowClickEvent();
+
+    $.ajax({
+        url:"http://localhost:8080/pos/item",
+        method: "get",
+        dataType: "json",
+        success:function (resp){
+            for (let item of resp.data) {
+                var row = `<tr><td>${item.itemCode}</td><td>${item.itemName}</td><td>${item.price}</td><td>${item.qty}</td></tr>`;
+                $("#tblItem").append(row);
+
+            }
+            bindRowClickEvent();
+        }
+    });
+
+
+
     loadItemCodeForCombo();
 }
 
@@ -85,26 +87,19 @@ function bindRowClickEvent() {
 //------------------ Delete Item-------------------
 $("#btnRemoveItem").click(function () {
     let deleteCode = $("#txtItemCode").val();
-    if (deleteItem(deleteCode)) {
-        alert("Item Successfully Deleted..");
-        clearItemTextFields();
-        generateCode();
-    } else {
-        alert("No such Item to delete, please check Code");
-    }
+
+    $.ajax({
+        url:"http://localhost:8080/pos/item?itemCode="+deleteCode,
+        method:"delete",
+        dataType:"json",
+        success:function (resp){
+            alert(resp.message);
+            loadAllItems();
+        }
+
+    });
 });
 
-
-function deleteItem(itemCode) {
-    let item = searchItem(itemCode);
-    if (item != null) {
-        let indexNo = itemDB.indexOf(item);
-        itemDB.splice(indexNo, 1);
-        loadAllItems();
-        return true;
-    }
-    return false;
-}
 
 //----------Update Item-----------------
 

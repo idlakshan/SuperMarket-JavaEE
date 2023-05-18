@@ -2,9 +2,9 @@ package lk.ijse.pos.dao.custom.impl;
 
 import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.entity.Item;
-import lk.ijse.pos.servlet.CustomerServlet;
 import lk.ijse.pos.servlet.ItemServlet;
 
+import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import java.sql.Connection;
@@ -36,8 +36,20 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public boolean delete(String s) throws SQLException, ClassNotFoundException {
-        return false;
+    public boolean delete(String code) throws SQLException, ClassNotFoundException {
+        Connection connection = ItemServlet.dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM item WHERE itemCode=?");
+        statement.setObject(1,code);
+
+        boolean isDeleted = statement.executeUpdate() > 0;
+
+        if (isDeleted){
+            connection.close();
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     @Override
@@ -52,7 +64,26 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public JsonArrayBuilder getAll() throws SQLException, ClassNotFoundException {
-        return null;
+        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+
+        Connection connection = ItemServlet.dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM item");
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()){
+            objectBuilder.add("itemCode",resultSet.getString("itemCode"));
+            objectBuilder.add("itemName",resultSet.getString("itemName"));
+            objectBuilder.add("price",resultSet.getString("price"));
+            objectBuilder.add("qty",resultSet.getString("qty"));
+
+            arrayBuilder.add(objectBuilder.build());
+
+        }
+        connection.close();
+
+        return arrayBuilder;
     }
 
     @Override
