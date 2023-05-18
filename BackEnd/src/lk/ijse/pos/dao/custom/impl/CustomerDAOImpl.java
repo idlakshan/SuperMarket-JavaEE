@@ -54,7 +54,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     public boolean update(Customer customer) throws SQLException, ClassNotFoundException {
         Connection connection = CustomerServlet.dataSource.getConnection();
 
-        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Customer SET CusName = ?,CusAddress = ?,cusSalary = ? WHERE CusID = ?");
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customer SET cusName = ?,cusAddress = ?,cusSalary = ? WHERE cusID = ?");
         preparedStatement.setObject(1,customer.getCusName());
         preparedStatement.setObject(2,customer.getCusAddress());
         preparedStatement.setObject(3,customer.getCusSalary());

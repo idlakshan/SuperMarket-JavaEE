@@ -1,9 +1,11 @@
-loadAllCustomer();
+
+
+loadAllCustomer()
+
 //----------------------Save Customer-----------------------
 $("#btnSaveCustomer").click(function (){
     saveCustomer();
     clearCustomerTextFields();
-   // loadCusIdForCombo();
 
 
  });
@@ -43,29 +45,11 @@ function saveCustomer(){
          }
 
      });
-
-
-   // loadCusIdForCombo();
-
-
 }
 
 //-----------------Search Customer----------------
 $("#btnSearchCustomer").click(function (){
   let searchId=$("#txtCusSearch").val();
-  /*let customer=searchCustomer(TypedId);
-  if (customer!=null){
-      $("#txtCusID").val(customer.id);
-      $("#txtCusName").val(customer.name);
-      $("#txtCusAddress").val(customer.address);
-      $("#txtCusSalary").val(customer.salary);
-
-      $("#txtCusSearch").val("");
-  }else{
-      alert("There is no customer available for this "+TypedId);
-  }
-*/
-
     $.ajax({
         url:"http://localhost:8080/pos/customer?cusId"+searchId+"",
         method:"get",
@@ -161,5 +145,4 @@ function clearCustomerTextFields(){
     $("#txtCusID").focus();
     $("#txtCusID,#txtCusName,#txtCusAddress,#txtCusSalary").val("");
 }
-
 

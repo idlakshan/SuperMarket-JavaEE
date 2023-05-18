@@ -4,9 +4,7 @@ import lk.ijse.pos.bo.custom.ItemBO;
 import lk.ijse.pos.dto.ItemDTO;
 
 import javax.annotation.Resource;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -121,5 +119,52 @@ public class ItemServlet extends HttpServlet {
             resp.getWriter().print(jsonObject.build());
             resp.setStatus(500);
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        JsonReader reader = Json.createReader(req.getReader());
+        JsonObject jsonObject = reader.readObject();
+
+        String itemCode = jsonObject.getString("itemCode");
+        String itemName = jsonObject.getString("itemName");
+        String price = jsonObject.getString("price");
+        String qty = jsonObject.getString("qty");
+
+        ItemDTO itemDTO=new ItemDTO(itemCode,itemName,Double.parseDouble(price),qty);
+        resp.setContentType("application/json");
+
+        try {
+            boolean isUpdated = itemBO.updateItem(itemDTO);
+            if (isUpdated){
+
+                JsonObjectBuilder object = Json.createObjectBuilder();
+                object.add("state","Done");
+                object.add("message","Item Updated Successfully..!");
+                resp.getWriter().print(object.build());
+
+            }else {
+                JsonObjectBuilder object = Json.createObjectBuilder();
+                object.add("state","Done");
+                object.add("message","No Item to Update..!");
+                resp.getWriter().print(object.build());
+            }
+
+        } catch (SQLException e) {
+            JsonObjectBuilder object = Json.createObjectBuilder();
+            object.add("state","Failed");
+            object.add("message",e.getMessage());
+            resp.getWriter().print(object.build());
+            resp.setStatus(400);
+
+        } catch (ClassNotFoundException e) {
+            JsonObjectBuilder object = Json.createObjectBuilder();
+            object.add("state","Failed");
+            object.add("message",e.getMessage());
+            resp.getWriter().print(object.build());
+            resp.setStatus(500);
+        }
+
+
     }
 }

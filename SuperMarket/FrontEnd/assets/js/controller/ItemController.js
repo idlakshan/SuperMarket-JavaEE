@@ -73,8 +73,9 @@ function bindRowClickEvent() {
     $("#tblItem>tr").click(function () {
         let itemCode = $(this).children(":eq(0)").text();
         let itemName = $(this).children(":eq(1)").text();
-        let itemQty = $(this).children(":eq(2)").text();
-        let itemPrice = $(this).children(":eq(3)").text();
+        let itemPrice = $(this).children(":eq(2)").text();
+        let itemQty = $(this).children(":eq(3)").text();
+
 
         $("#txtItemCode").val(itemCode);
         $("#txtItemName").val(itemName);
@@ -104,31 +105,34 @@ $("#btnRemoveItem").click(function () {
 //----------Update Item-----------------
 
 $("#btnUpdateItem").click(function () {
-    let updateId = $("#txtItemCode").val();
-    let response = updateItem(updateId);
-    if (response) {
-        alert("Item Updated Successfully..")
-        generateCode();
-    } else {
-        alert("Item failed")
+    let id = $("#txtItemCode").val();
+    let name = $("#txtItemName").val();
+    let uprice = $("#txtItemPrice").val();
+    let Qty = $("#txtItemQty").val();
+
+    let item={
+        ItemCode:id,
+        itemName:name,
+        price:uprice,
+        qty:Qty,
     }
+
+    $.ajax({
+        url:"http://localhost:8080/pos/item",
+        method:"put",
+        contentType:"application/json",
+        data: JSON.stringify(item),
+        dataType:"json",
+        success:function (resp){
+            alert(resp.message);
+            loadAllItems()
+        },
+        error:function (error) {
+            alert(JSON.parse(error.responseText).message);
+        }
+    });
+
 });
-
-
-function updateItem(itemCode) {
-    let item = searchItem(itemCode);
-    if (item != null) {
-        item.code = $("#txtItemCode").val();
-        item.name = $("#txtItemName").val();
-        item.qty = $("#txtItemQty").val();
-        item.price = $("#txtItemPrice").val();
-
-       loadAllItems();
-        return true;
-
-    }
-    return false;
-}
 
 
 //-------------------Clear Text Fields---------------

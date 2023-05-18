@@ -1,62 +1,102 @@
 
-setDate();
-//----------------Load CustomerId to combo-----------------
-function loadCusIdForCombo() {
+ let baseUrl="http://localhost:8080/pos/";
+
+ loadAllCustomers();
+ loadAllItems();
+ setDates();
+
+
+//------combo Ids--------------------
+function loadAllCustomers() {
     $("#cmbCusId").empty();
-
-    let cusHint=`<option disabled selected> Select Customer ID</option>`;
-
-    $("#cmbCusId").append(cusHint);
-
-    for (let i in customersDB) {
-        let option = `<option value="${customersDB[i].id}">${customersDB[i].id}</option>`
-        $("#cmbCusId").append(option);
-    }
+    $.ajax({
+        url: baseUrl + "customer",
+        dataType: "json",
+        success: function (resp) {
+            console.log(resp);
+            for (let cus of resp.data) {
+                $("#cmbCusId").append(`<option value="${cus.cusId}">${cus.cusId}</option>`);
+            }
+        },
+        error: function (error) {
+            let message = JSON.parse(error.responseText).message;
+            alert(message);
+        }
+    });
 }
 
+ function loadAllItems() {
+     $("#cmbItemCode").empty();
+     $.ajax({
+         url: baseUrl + "item",
+         dataType: "json",
+         success: function (res) {
+             for (let item of res.data) {
+                 $("#cmbItemCode").append(`<option value="${item.itemCode}">${item.itemCode}</option>`);
+             }
+         },
+         error: function (error) {
+             let message = JSON.parse(error.responseText).message;
+             alert(message);
+         }
+     });
+ }
 
-//----------------Load ItemCode to combo-----------------
-function loadItemCodeForCombo() {
-    $("#cmbItemCode").empty();
-
-    let itemHint=`<option disabled selected> Select Item Code</option>`;
-
-    $("#cmbItemCode").append(itemHint);
-
-    for (let i in itemDB) {
-        let option = `<option value="${itemDB[i].code}">${itemDB[i].code}</option>`
-        $("#cmbItemCode").append(option);
-    }
-}
-
-//----------------Fill other Text fields-----------------
-$("#cmbCusId").change(function () {
-    let cusID = $("#cmbCusId").val();
-    let customer = searchCustomer(cusID);
-    if (customer != null) {
-        $("#txtOrderCusName").val(customer.name);
-        $("#txtOrderCusAddress").val(customer.address);
-        $("#txtOrderCusSalary").val(customer.salary);
-    }
-});
-
-$("#cmbItemCode").change(function () {
-    let itemCode = $("#cmbItemCode").val();
-    let item = searchItem(itemCode);
-    if (item != null) {
-        $("#txtOrderItemName").val(item.name);
-        $("#txtQtyOnHand").val(item.qty);
-        $("#txtOrderPrice").val(item.price);
-    }
-});
-
-//--------------Set Date------------------
-function setDate() {
-    let d = new Date();
-    let dd = d.toISOString().split("T")[0].split("-");
-    $("#txtOrderDate").val(dd[0]+"-"+dd[1]+"-"+dd[2]);
-    $("#txtOrderDate").text(dd[0]+"-"+dd[1]+"-"+dd[2]);
-}
+ function setDates() {
+     let date = new Date().toJSON().split("T")[0];
+     $("#txtOrderDate").val(date);
+ }
 
 
+ $("#cmbCusId").change(function () {
 
+     let customerId = $("#cmbCusId").val();
+
+     $.ajax({
+         url: baseUrl+"customer",
+         method: "get",
+         success(resp) {
+             for (const i of resp.data) {
+                 if (customerId == i.cusId) {
+
+                     $("#txtOrderCusName").val(i.cusName);
+                     $("#txtOrderCusAddress").val(i.cusAddress);
+                     $("#txtOrderCusSalary").val(i.cusSalary);
+                 }
+             }
+         }
+     });
+ });
+
+ $("#cmbItemCode").change(function () {
+
+     let itemCode = $("#cmbItemCode").val();
+
+     $.ajax({
+         url: baseUrl+"item",
+         method: "get",
+         dataType:"json",
+         success(resp) {
+             for (const i of resp.data) {
+                 if (itemCode == i.itemCode) {
+
+                     $("#txtOrderItemName").val(i.itemName);
+                     $("#txtQtyOnHand").val(i.qty);
+                     $("#txtOrderPrice").val(i.price);
+                 }
+             }
+         }
+     });
+
+ });
+
+ //------Add Table--------------------
+
+ $("#btnAdd").click(function () {
+     let code = $("#cmbItemCode").val();
+     let name = $("#txtOrderItemName").val();
+     let price = $("#txtOrderPrice").val();
+     let buyQty = $("#txtOrderQty").val();
+     let total = parseFloat(price) * parseFloat(buyQty);
+     $("#tblOrder").append(`<tr><td>${code}</td><td>${name}</td><td>${price}</td><td>${buyQty}</td><td>${total}</td></tr>`);
+ });

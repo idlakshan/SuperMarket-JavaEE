@@ -4,9 +4,7 @@ import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.entity.Item;
 import lk.ijse.pos.servlet.ItemServlet;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,6 +52,20 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public boolean update(Item item) throws SQLException, ClassNotFoundException {
+        Connection connection = ItemServlet.dataSource.getConnection();
+
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE item SET itemName = ?,price = ?,qty = ? WHERE itemCode = ?");
+        preparedStatement.setObject(1,item.getItemName());
+        preparedStatement.setObject(2,item.getPrice());
+        preparedStatement.setObject(3,item.getQty());
+        preparedStatement.setObject(4,item.getItemCode());
+
+        boolean isUpdated = preparedStatement.executeUpdate() > 0;
+
+        if (isUpdated){
+            connection.close();
+            return true;
+        }
         return false;
     }
 
