@@ -1,17 +1,30 @@
-generateCode();
+
 //---------------------Save Item-------------------
 $("#btnSaveItem").click(function () {
-    let itemCode = $("#txtItemCode").val();
+  /*  let itemCode = $("#txtItemCode").val();
     let itemName = $("#txtItemName").val();
     let itemQty = $("#txtItemQty").val();
     let itemPrice = $("#txtItemPrice").val();
 
     let ItemObject = new ItemDTO(itemCode, itemName, itemQty, itemPrice);
 
-    itemDB.push(ItemObject);
+    itemDB.push(ItemObject);*/
+    let formData = $("#itemForm").serialize();
+
+    $.ajax({
+        url:"http://localhost:8080/pos/item",
+        method:"post",
+        data:formData,
+        dataType:"json",
+        success:function (resp){
+            alert(resp.message);
+
+        }
+
+
+    });
     loadAllItems();
     clearItemTextFields();
-    generateCode();
 
 });
 
@@ -133,28 +146,9 @@ function clearItemTextFields() {
     $("#txtItemCode,#txtItemName,#txtItemQty,#txtItemPrice").val("");
 }
 
-//-----------Auto generate Id--------------
-function generateCode() {
-    let index = itemDB.length - 1;
-    let code;
-    let temp;
-    if (index != -1) {
-        code = customersDB[customersDB.length - 1].code;
-        temp = code.split("-")[1];
-        temp++;
-    }
 
-    if (index == -1) {
-        $("#txtItemCode").val("I00-001");
-    } else if (temp <= 9) {
-        $("#txtItemCode").val("I00-00" + temp);
-    } else if (temp <= 99) {
-        $("#txtItemCode").val("I00-0" + temp);
-    } else {
-        $("#txtItemCode").val("I00-" + temp);
-    }
 
-}
+
 
 
 
