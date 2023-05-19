@@ -100,3 +100,48 @@ function loadAllCustomers() {
      let total = parseFloat(price) * parseFloat(buyQty);
      $("#tblOrder").append(`<tr><td>${code}</td><td>${name}</td><td>${price}</td><td>${buyQty}</td><td>${total}</td></tr>`);
  });
+
+
+function getOrderDetails(){
+    let rows = $("#tblOrder").children().length;
+    var array = [];
+    for (let i = 0; i < rows; i++) {
+        let itemCode = $("#tblOrder").children().eq(i).children(":eq(0)").text();
+        let itemPrice = $("#tblOrder").children().eq(i).children(":eq(2)").text();
+        let itemQty = $("#tblOrder").children().eq(i).children(":eq(3)").text();
+        array.push({code: itemCode, price: itemPrice, qty: itemQty});
+    }
+    return array;
+
+
+}
+
+ $("#btnPurchase").click(function () {
+     let orderID = $("#txtOrder").val();
+     let customerID = $("#cmbCusId").val();
+     let orderDate = $("#txtOrderDate").val();
+     let orderDetails = getOrderDetails();
+
+     let ob={
+         oid:orderID,
+         date:orderDate,
+         cusID:customerID,
+         orderDetails:orderDetails
+     }
+
+     $.ajax({
+         url: baseUrl + "purchase",
+         method:"post",
+         dataType: "json",
+         data:JSON.stringify(ob),
+         contentType:"application/json",
+         success: function (resp) {
+             alert(resp.message);
+         },
+         error:function (error){
+             alert(JSON.parse(error.responseText).message);
+         }
+     });
+
+
+ });
