@@ -126,13 +126,13 @@ public class ItemServlet extends HttpServlet {
         JsonReader reader = Json.createReader(req.getReader());
         JsonObject jsonObject = reader.readObject();
 
-        String itemCode = jsonObject.getString("itemCode");
-        String itemName = jsonObject.getString("itemName");
-        String price = jsonObject.getString("price");
-        String qty = jsonObject.getString("qty");
+        String ItemCode = jsonObject.getString("ItemCode");
+        String ItemName = jsonObject.getString("ItemName");
+        String Price = jsonObject.getString("Price");
+        String Qty = jsonObject.getString("Qty");
 
-        ItemDTO itemDTO=new ItemDTO(itemCode,itemName,Double.parseDouble(price),qty);
-        resp.setContentType("application/json");
+        ItemDTO itemDTO=new ItemDTO(ItemCode,ItemName,Double.parseDouble(Price),Qty);
+
 
         try {
             boolean isUpdated = itemBO.updateItem(itemDTO);

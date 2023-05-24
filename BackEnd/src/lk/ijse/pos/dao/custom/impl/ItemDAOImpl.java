@@ -60,6 +60,8 @@ public class ItemDAOImpl implements ItemDAO {
         preparedStatement.setObject(3,item.getQty());
         preparedStatement.setObject(4,item.getItemCode());
 
+        System.out.println(item.getItemCode());
+
         boolean isUpdated = preparedStatement.executeUpdate() > 0;
 
         if (isUpdated){

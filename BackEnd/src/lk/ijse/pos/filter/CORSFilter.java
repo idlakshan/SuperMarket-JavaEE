@@ -21,7 +21,7 @@ public class CORSFilter implements Filter {
              response.addHeader("Access-Control-Allow-Origin","*");
              response.addHeader("Access-Control-Allow-Methods","DELETE,PUT");
              response.addHeader("Access-Control-Allow-Headers","Content-Type");
-
+             response.setContentType("application/json");
     }
 
     @Override

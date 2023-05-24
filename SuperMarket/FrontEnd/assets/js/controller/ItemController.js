@@ -34,13 +34,10 @@ function loadAllItems() {
             bindRowClickEvent();
         }
     });
-
-
-
-    loadItemCodeForCombo();
 }
 
 //-------------Search Item---------------
+/*
 $("#btnSearchItem").click(function () {
     let typedCode = $("#txtItemSearch").val();
     let item = searchItem(typedCode);
@@ -57,8 +54,9 @@ $("#btnSearchItem").click(function () {
     }
 
 })
+*/
 
-function searchItem(itemCode) {
+/*function searchItem(itemCode) {
     for (let item of itemDB) {
         if (item.code == itemCode) {
             return item;
@@ -66,7 +64,7 @@ function searchItem(itemCode) {
 
     }
     return null
-}
+}*/
 
 //--------------------Row Clicked----------------
 function bindRowClickEvent() {
@@ -108,13 +106,13 @@ $("#btnUpdateItem").click(function () {
     let id = $("#txtItemCode").val();
     let name = $("#txtItemName").val();
     let uprice = $("#txtItemPrice").val();
-    let Qty = $("#txtItemQty").val();
+    let qty = $("#txtItemQty").val();
 
     let item={
         ItemCode:id,
-        itemName:name,
-        price:uprice,
-        qty:Qty,
+        ItemName:name,
+        Price:uprice,
+        Qty:qty,
     }
 
     $.ajax({
