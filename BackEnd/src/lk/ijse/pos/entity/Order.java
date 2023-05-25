@@ -8,16 +8,17 @@ public class Order {
     private String orderDate;
     private String cusID;
 
-    private ArrayList<OrderDetails> orderDetails;
+    private ArrayList<OrderDetails> OrderDetails;
 
     public Order() {
+
     }
 
-    public Order(String orderID, String orderDate, String cusID, ArrayList<OrderDetails> orderDetails) {
+    public Order(String orderID, String orderDate, String cusID, ArrayList<lk.ijse.pos.entity.OrderDetails> orderDetails) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.cusID = cusID;
-        this.orderDetails = orderDetails;
+        OrderDetails = orderDetails;
     }
 
     public String getOrderID() {
@@ -44,11 +45,21 @@ public class Order {
         this.cusID = cusID;
     }
 
-    public ArrayList<OrderDetails> getOrderDetails() {
-        return orderDetails;
+    public ArrayList<lk.ijse.pos.entity.OrderDetails> getOrderDetails() {
+        return OrderDetails;
     }
 
-    public void setOrderDetails(ArrayList<OrderDetails> orderDetails) {
-        this.orderDetails = orderDetails;
+    public void setOrderDetails(ArrayList<lk.ijse.pos.entity.OrderDetails> orderDetails) {
+        OrderDetails = orderDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderID='" + orderID + '\'' +
+                ", orderDate='" + orderDate + '\'' +
+                ", cusID='" + cusID + '\'' +
+                ", OrderDetails=" + OrderDetails +
+                '}';
     }
 }

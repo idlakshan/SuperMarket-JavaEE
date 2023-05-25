@@ -3,19 +3,18 @@ package lk.ijse.pos.entity;
 public class OrderDetails {
     private String orderID;
     private String itemCode;
-    private String orderqty;
-    private double discount;
-    private double balance;
+    private double price;
+    private int orderQty;
+
 
     public OrderDetails() {
     }
 
-    public OrderDetails(String orderID, String itemCode, String orderqty, double discount, double balance) {
+    public OrderDetails(String orderID, String itemCode, double price, int orderQty) {
         this.orderID = orderID;
         this.itemCode = itemCode;
-        this.orderqty = orderqty;
-        this.discount = discount;
-        this.balance = balance;
+        this.price = price;
+        this.orderQty = orderQty;
     }
 
     public String getOrderID() {
@@ -34,27 +33,29 @@ public class OrderDetails {
         this.itemCode = itemCode;
     }
 
-    public String getOrderqty() {
-        return orderqty;
+    public double getPrice() {
+        return price;
     }
 
-    public void setOrderqty(String orderqty) {
-        this.orderqty = orderqty;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public double getDiscount() {
-        return discount;
+    public int getOrderQty() {
+        return orderQty;
     }
 
-    public void setDiscount(double discount) {
-        this.discount = discount;
+    public void setOrderQty(int orderQty) {
+        this.orderQty = orderQty;
     }
 
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
+    @Override
+    public String toString() {
+        return "OrderDetails{" +
+                "orderID='" + orderID + '\'' +
+                ", itemCode='" + itemCode + '\'' +
+                ", price=" + price +
+                ", orderQty=" + orderQty +
+                '}';
     }
 }

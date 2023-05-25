@@ -1,5 +1,5 @@
 
- let baseUrl="http://localhost:8080/pos/";
+ //let baseUrl="http://localhost:8080/pos";
 
  loadAllCustomers();
  loadAllItems();
@@ -10,7 +10,7 @@
 function loadAllCustomers() {
     $("#cmbCusId").empty();
     $.ajax({
-        url: baseUrl + "customer",
+        url:  "http://localhost:8080/pos/customer",
         dataType: "json",
         success: function (resp) {
             console.log(resp);
@@ -28,7 +28,7 @@ function loadAllCustomers() {
  function loadAllItems() {
      $("#cmbItemCode").empty();
      $.ajax({
-         url: baseUrl + "item",
+         url: "http://localhost:8080/pos/item",
          dataType: "json",
          success: function (res) {
              for (let item of res.data) {
@@ -53,7 +53,7 @@ function loadAllCustomers() {
      let customerId = $("#cmbCusId").val();
 
      $.ajax({
-         url: baseUrl+"customer",
+         url: "http://localhost:8080/pos/customer",
          method: "get",
          success(resp) {
              for (const i of resp.data) {
@@ -73,7 +73,7 @@ function loadAllCustomers() {
      let itemCode = $("#cmbItemCode").val();
 
      $.ajax({
-         url: baseUrl+"item",
+         url:"http://localhost:8080/pos/item",
          method: "get",
          dataType:"json",
          success(resp) {
@@ -104,12 +104,13 @@ function loadAllCustomers() {
 
 function getOrderDetails(){
     let rows = $("#tblOrder").children().length;
+
     var array = [];
     for (let i = 0; i < rows; i++) {
         let itemCode = $("#tblOrder").children().eq(i).children(":eq(0)").text();
-        let itemPrice = $("#tblOrder").children().eq(i).children(":eq(2)").text();
-        let itemQty = $("#tblOrder").children().eq(i).children(":eq(3)").text();
-        array.push({code: itemCode, price: itemPrice, qty: itemQty});
+        let price = $("#tblOrder").children().eq(i).children(":eq(2)").text();
+        let orderQty = $("#tblOrder").children().eq(i).children(":eq(3)").text();
+        array.push({itemCode: itemCode, price: price, orderQty: orderQty});
     }
     return array;
 
@@ -117,20 +118,21 @@ function getOrderDetails(){
 }
 
  $("#btnPurchase").click(function () {
-     let orderID = $("#txtOrder").val();
-     let customerID = $("#cmbCusId").val();
+     let orderID = $("#txtOrderId").val();
      let orderDate = $("#txtOrderDate").val();
-     let orderDetails = getOrderDetails();
+     let cusID = $("#cmbCusId").val();
+     let orderdetails = getOrderDetails();
+     console.log(orderID+" "+orderDate+" "+cusID)
 
      let ob={
-         oid:orderID,
-         date:orderDate,
-         cusID:customerID,
-         orderDetails:orderDetails
+         orderID:orderID,
+         orderDate:orderDate,
+         cusID:cusID,
+         orderdetails:orderdetails,
      }
 
      $.ajax({
-         url: baseUrl + "purchase",
+         url: "http://localhost:8080/pos/purchase",
          method:"post",
          dataType: "json",
          data:JSON.stringify(ob),

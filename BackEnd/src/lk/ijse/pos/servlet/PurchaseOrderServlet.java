@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -22,7 +23,7 @@ public class PurchaseOrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Connection connection = null;
+         Connection connection = null;
 
         try {
             connection=dataSource.getConnection();
@@ -31,31 +32,37 @@ public class PurchaseOrderServlet extends HttpServlet {
             JsonReader reader = Json.createReader(req.getReader());
             JsonObject requestOb = reader.readObject();
 
-            String oId = requestOb.getString("oid");
-            String date = requestOb.getString("date");
+            String orderID = requestOb.getString("orderID");
+            String orderDate = requestOb.getString("orderDate");
             String cusID = requestOb.getString("cusID");
 
-            PreparedStatement psmt = connection.prepareStatement("Insert into `order` values(?,?,?)");
-            psmt.setObject(1,oId);
-            psmt.setObject(2,date);
+
+            System.out.println(orderID+" "+orderDate+" "+cusID);
+
+            PreparedStatement psmt = connection.prepareStatement("INSERT INTO orders VALUES (?,?,?)");
+            psmt.setObject(1,orderID);
+            psmt.setObject(2,orderDate);
             psmt.setObject(3,cusID);
+
+
 
             if (!(psmt.executeUpdate() > 0)) {
                 connection.rollback();
                 throw new RuntimeException("Can't Save The Order");
             }else{
-                   JsonArray orderDetails = requestOb.getJsonArray("orderDetails");
+                   JsonArray orderDetails = requestOb.getJsonArray("orderdetails");
                 for (JsonValue od : orderDetails) {
-                    String code = od.asJsonObject().getString("itemCode");
-                    String qty = od.asJsonObject().getString("orderqty");
-                    String price = od.asJsonObject().getString("price");
 
-                    PreparedStatement pstm2 = connection.prepareStatement("Insert into orderDetails values(?,?,?,?)");
-                    pstm2.setObject(1,oId);
-                    pstm2.setObject(2,code);
-                    pstm2.setObject(3,qty);
-                    pstm2.setObject(4,price);
+                   // String orderId=od.asJsonObject().getString("orderID");
+                    String itemCode = od.asJsonObject().getString("itemCode");
+                    double price = Double.parseDouble(od.asJsonObject().getString("price"));
+                    int orderQty = Integer.parseInt(od.asJsonObject().getString("orderQty"));
 
+                    PreparedStatement pstm2 = connection.prepareStatement("INSERT INTO orderdetails VALUES (?,?,?,?)");
+                    pstm2.setObject(1,orderID);
+                    pstm2.setObject(2,itemCode);
+                    pstm2.setObject(3,price);
+                    pstm2.setObject(4,orderQty);
 
                     if (!(pstm2.executeUpdate() > 0)) {
                         connection.rollback();
@@ -64,7 +71,7 @@ public class PurchaseOrderServlet extends HttpServlet {
                 }
                 connection.commit();
                 connection.setAutoCommit(true);
-                connection.close();
+                //connection.close();
 
                 JsonObjectBuilder responseObject = Json.createObjectBuilder();
                 responseObject.add("state","done");
@@ -80,7 +87,7 @@ public class PurchaseOrderServlet extends HttpServlet {
             try {
                 connection.rollback();
                 connection.setAutoCommit(true);
-                connection.close();
+               // connection.close();
 
             } catch (SQLException ex) {
                 jsonObject.add("state","error");

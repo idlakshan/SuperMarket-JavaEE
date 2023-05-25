@@ -1,5 +1,7 @@
 package lk.ijse.pos.dto;
 
+import lk.ijse.pos.entity.OrderDetails;
+
 import java.util.ArrayList;
 
 public class OrderDTO {
@@ -7,16 +9,16 @@ public class OrderDTO {
     private String orderDate;
     private String cusID;
 
-    private ArrayList<OrderDetailsDTO> orderDetailsDTOS;
+    private ArrayList<OrderDetails> OrderDetails;
 
     public OrderDTO() {
     }
 
-    public OrderDTO(String orderID, String orderDate, String cusID, ArrayList<OrderDetailsDTO> orderDetailsDTOS) {
+    public OrderDTO(String orderID, String orderDate, String cusID, ArrayList<lk.ijse.pos.entity.OrderDetails> orderDetails) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.cusID = cusID;
-        this.orderDetailsDTOS = orderDetailsDTOS;
+        OrderDetails = orderDetails;
     }
 
     public String getOrderID() {
@@ -43,12 +45,12 @@ public class OrderDTO {
         this.cusID = cusID;
     }
 
-    public ArrayList<OrderDetailsDTO> getOrderDetailsDTOS() {
-        return orderDetailsDTOS;
+    public ArrayList<lk.ijse.pos.entity.OrderDetails> getOrderDetails() {
+        return OrderDetails;
     }
 
-    public void setOrderDetailsDTOS(ArrayList<OrderDetailsDTO> orderDetailsDTOS) {
-        this.orderDetailsDTOS = orderDetailsDTOS;
+    public void setOrderDetails(ArrayList<lk.ijse.pos.entity.OrderDetails> orderDetails) {
+        OrderDetails = orderDetails;
     }
 
     @Override
@@ -57,7 +59,7 @@ public class OrderDTO {
                 "orderID='" + orderID + '\'' +
                 ", orderDate='" + orderDate + '\'' +
                 ", cusID='" + cusID + '\'' +
-                ", orderDetailsDTOS=" + orderDetailsDTOS +
+                ", OrderDetails=" + OrderDetails +
                 '}';
     }
 }
